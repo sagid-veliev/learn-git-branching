@@ -30,6 +30,7 @@ const props = defineProps({
 <style lang="scss" scoped>
 .collapse {
     position: absolute;
+    z-index: 50;
     width: 40px;
     height: 40px;
     border-radius: 50%;

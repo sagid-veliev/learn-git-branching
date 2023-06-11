@@ -18,6 +18,11 @@ class Api {
         const response: AxiosResponse = await this.api.get(`/api/v1/task_info/${id}`);
         return response.data.tasks;
     }
+
+    async getGraph(id: number): Promise<any> {
+        const response: AxiosResponse = await this.api.get(`/api/v1/grapth/${id}`);
+        return response.data;
+    }
 }
 
 export default new Api();

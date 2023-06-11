@@ -15,7 +15,8 @@
         <div class="modal-input">
             <label for="input">
                 <input
-                    placeholder="$"
+                    :placeholder="notValid ? 'Некорректная команда' : '$'"
+                    :class="{ 'modal-input_valid': notValid }"
                     class="modal-input_el"
                     id="input"
                     type="text"
@@ -31,11 +32,17 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useRoute } from 'vue-router';
 import {
-    onBeforeMount, Ref, ref,
+    onBeforeMount, onMounted, Ref, ref, toRaw,
 } from 'vue';
 import gitNodes from '@/utils/utils';
 import { Node } from '@/models/types';
+import checkResult from '@/utils/checkResult';
+import Api from '@/services/api';
+import { useStore } from 'vuex';
+import validate from '@/utils/validateInput';
+// eslint-disable-next-line import/extensions,import/no-unresolved
 
+const store = useStore();
 const route = useRoute();
 const title: Ref<string> = ref('');
 const command: Ref<string> = ref('');
@@ -45,19 +52,53 @@ const nodes: Ref<Node[]> = ref([
         id: 1,
         name: 'C1',
         parent: [],
-        type: 1,
+        type: 0,
         children: [],
+        branch: ['main'],
+        currentBranch: 'main',
     },
 ]);
+const taskId: Ref<string> = ref('');
+const solveGraph: any = ref();
+const notValid: Ref<boolean> = ref(false);
+
+const checkCommands = (input: string) => {
+    if (input.includes('git branch')) {
+        return false;
+    }
+    if (input.includes('git checkout')) {
+        return false;
+    }
+    return true;
+};
 
 const sendCommand = () => {
+    if (!command.value || validate(command.value)) {
+        notValid.value = true;
+        command.value = '';
+        return;
+    }
+    notValid.value = false;
     commands.value.push(command.value);
-    nodes.value = gitNodes(command.value, nodes.value, commands.value.length + 1);
+    nodes.value = gitNodes(command.value, nodes.value, commands.value.filter((com) => checkCommands(com)).length + 1);
+    Api.getGraph(Number(taskId.value))
+        .then((response: any) => {
+            solveGraph.value = response.solve_graph;
+        });
+    const desicion = checkResult(toRaw(nodes.value), toRaw(solveGraph.value));
+    if (desicion) {
+        store.commit('isSolved', true);
+    }
     command.value = '';
 };
 
 onBeforeMount(() => {
+    taskId.value = String(route.params.id);
     title.value = String(route.params.title);
+});
+
+onMounted(() => {
+    nodes.value = gitNodes('', nodes.value, commands.value.length + 1);
 });
 </script>
 
@@ -82,6 +123,7 @@ onBeforeMount(() => {
         background: #353740;
         color: $font;
         border-radius: 5px 5px 0 0;
+        cursor: pointer;
     }
     &-content {
         height: 100%;
@@ -114,6 +156,12 @@ onBeforeMount(() => {
                 outline: none;
                 border-color: #666;
                 //box-shadow: 0 0 5px rgba(102, 102, 102, 0.5);
+            }
+        }
+        &_valid {
+            border: 1px solid red;
+            &:focus {
+                border: 1px solid red;
             }
         }
     }

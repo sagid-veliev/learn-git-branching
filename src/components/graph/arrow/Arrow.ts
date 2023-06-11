@@ -9,21 +9,27 @@ class GitArrow {
 
     classNumber: number;
 
-    constructor(top: number, classNumber: number) {
+    solve?: boolean;
+
+    constructor(top: number, classNumber: number, solve?: boolean) {
         this.componentArrow = null;
         this.top = top;
         this.instance = null;
         this.classNumber = classNumber;
+        this.solve = solve;
     }
 
     createArrow() {
         const wrapperDiv = document.createElement('div');
         wrapperDiv.className = `arrow-${this.classNumber}`;
-        const parentElement = document.querySelector('#app');
-        if (parentElement) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+        let parentElement;
+        if (!this.solve) {
             document.body.appendChild(wrapperDiv);
+        } else {
+            parentElement = document.querySelector('#solve');
+            if (parentElement) {
+                parentElement.appendChild(wrapperDiv);
+            }
         }
         if (this.componentArrow) {
             this.instance = createApp(this.componentArrow, {

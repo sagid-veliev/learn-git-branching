@@ -1,30 +1,33 @@
 import { Component, ComponentOptions, createApp } from 'vue';
 
-class GitNode {
-    componentNode: Component | null;
+class GitBranch {
+    componentBranch: Component | null;
 
     instance: ComponentOptions | null;
 
-    name: string;
+    name: string[];
+
+    currentBranch: string;
 
     top: number;
 
-    left: number;
-
     solve?: boolean;
 
-    constructor(name: string, top: number, left: number, solve?: boolean) {
-        this.componentNode = null;
-        this.instance = null;
+    left?: number;
+
+    constructor(name: string[], currentBranch: string, top: number, left?: number, solve?: boolean) {
         this.name = name;
+        this.currentBranch = currentBranch;
         this.top = top;
         this.left = left;
         this.solve = solve;
+        this.componentBranch = null;
+        this.instance = null;
     }
 
-    createNode() {
+    createBranch() {
         const wrapperDiv = document.createElement('div');
-        wrapperDiv.className = `node-${this.top}`;
+        wrapperDiv.className = `branch-${this.top}`;
         let parentElement;
         if (!this.solve) {
             parentElement = document.querySelector('#app');
@@ -33,21 +36,22 @@ class GitNode {
             parentElement = document.querySelector('#solve');
             parentElement?.appendChild(wrapperDiv);
         }
-        if (this.componentNode) {
-            this.instance = createApp(this.componentNode, {
+        if (this.componentBranch) {
+            this.instance = createApp(this.componentBranch, {
                 name: this.name,
+                currentBranch: this.currentBranch,
                 top: this.top,
                 left: this.left,
             });
-            this.instance.mount(`.node-${this.top}`);
+            this.instance.mount(`.branch-${this.top}`);
         }
     }
 
-    destroyNode() {
+    destroyBranch() {
         if (this.instance) {
             this.instance.unmount();
         }
     }
 }
 
-export default GitNode;
+export default GitBranch;

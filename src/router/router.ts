@@ -4,7 +4,7 @@ import TaskComponent from '@/components/TaskComponent.vue';
 import PlaygroundView from '@/components/views/PlaygroundView.vue';
 import PageNotFound from '@/components/PageNotFound.vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, RouteLocationNormalized } from 'vue-router';
 
 const routes = [
     {
@@ -37,7 +37,18 @@ const routes = [
 const router = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: createWebHistory(),
-    routes, // short for `routes: routes`
+    routes,
+});
+
+router.afterEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+    if (from.name === 'Playground') {
+        const blocksWithNodeClass = document.querySelectorAll('[class*="node"]');
+        const blockWithArrowClass = document.querySelectorAll('[class*="arrow"]');
+        const nodeList = [...blocksWithNodeClass, ...blockWithArrowClass];
+        nodeList.forEach((node: Element) => {
+            node.remove();
+        });
+    }
 });
 
 export default router;

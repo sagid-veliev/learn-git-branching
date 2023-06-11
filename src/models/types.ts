@@ -4,4 +4,6 @@ export interface Node {
     parent: number[],
     type: number,
     children: Array<Node>,
+    branch: string[],
+    currentBranch: string,
 }

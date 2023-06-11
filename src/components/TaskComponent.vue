@@ -13,7 +13,7 @@
                 </p>
             </div>
             <div class="task-footer">
-                <button class="" @click="goToPlayground">Приступить к решению</button>
+                <button @click="goToPlayground">Приступить к решению</button>
             </div>
         </div>
     </div>

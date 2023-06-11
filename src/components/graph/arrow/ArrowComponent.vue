@@ -31,7 +31,7 @@ const props = defineProps({
     flex-direction: column;
     align-items: center;
     top: 5%;
-    left: 55%;
+    left: 50%;
     transition: 1s;
     &-head {
         width: 0;
