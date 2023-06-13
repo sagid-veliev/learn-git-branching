@@ -24,7 +24,7 @@ class GitNode {
 
     createNode() {
         const wrapperDiv = document.createElement('div');
-        wrapperDiv.className = `node-${this.top}`;
+        wrapperDiv.className = `node-${this.top}-${Math.round(this.left)}`;
         let parentElement;
         if (!this.solve) {
             parentElement = document.querySelector('#app');
@@ -39,7 +39,7 @@ class GitNode {
                 top: this.top,
                 left: this.left,
             });
-            this.instance.mount(`.node-${this.top}`);
+            this.instance.mount(`.node-${this.top}-${Math.round(this.left)}`);
         }
     }
 

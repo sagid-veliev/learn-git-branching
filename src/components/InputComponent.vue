@@ -56,6 +56,7 @@ const nodes: Ref<Node[]> = ref([
         children: [],
         branch: ['main'],
         currentBranch: 'main',
+        currentNode: true,
     },
 ]);
 const taskId: Ref<string> = ref('');

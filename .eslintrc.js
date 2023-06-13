@@ -28,5 +28,7 @@ module.exports = {
             },
         ],
         indent: ['error', 4],
+        'no-use-before-define': 'off',
+        'no-param-reassign': 'off',
     },
 };

@@ -3,6 +3,7 @@ import TaskListComponent from '@/components/TaskListComponent.vue';
 import TaskComponent from '@/components/TaskComponent.vue';
 import PlaygroundView from '@/components/views/PlaygroundView.vue';
 import PageNotFound from '@/components/PageNotFound.vue';
+import clear from '@/utils/clearPlayground';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createRouter, createWebHistory, RouteLocationNormalized } from 'vue-router';
 
@@ -42,12 +43,9 @@ const router = createRouter({
 
 router.afterEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
     if (from.name === 'Playground') {
-        const blocksWithNodeClass = document.querySelectorAll('[class*="node"]');
-        const blockWithArrowClass = document.querySelectorAll('[class*="arrow"]');
-        const nodeList = [...blocksWithNodeClass, ...blockWithArrowClass];
-        nodeList.forEach((node: Element) => {
-            node.remove();
-        });
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        clear();
     }
 });
 
