@@ -22,9 +22,9 @@ function checkGitCommit(command: string) {
     return command === 'git commit';
 }
 
-// function checkGitMerge(command: string) {
-//     return command.includes('git merge');
-// }
+function checkGitMerge(command: string) {
+    return command.includes('git merge');
+}
 
 function getName(command: string) {
     const splittedCommand: string[] = command.split(' ');
@@ -40,11 +40,98 @@ export function getCheckoutName(command: string) {
     return getName(command);
 }
 
-// function getMergeName(command: string) {
-//     return getName(command);
-// }
+function getMergeName(command: string) {
+    return getName(command);
+}
 
 export default function gitNode(command: string, nodes: Node[], id: number): Node[] {
+    function searchDeepestChildren(child: Node) {
+        const currentChild = child.children.find((item: Node) => item.currentBranch === currBranch);
+        if (currentChild) {
+            (function recursiveChildren(elem: Node) {
+                if (elem.children.length) {
+                    const currentChildDeep = elem.children.find((item: Node) => item.currentBranch === currBranch);
+                    if (currentChildDeep) {
+                        recursiveChildren(currentChildDeep);
+                    }
+                } else {
+                    node.parent.push(elem.id);
+                    elem.children.push(node);
+                }
+            }(currentChild));
+        } else {
+            node.parent.push(id);
+            child.children.push(node);
+        }
+    }
+    function addCommit(array: Node[]) {
+        array.forEach((item: Node) => {
+            if (item.currentNode) {
+                item.currentNode = false;
+                if (item.children.length) {
+                    searchDeepestChildren(item);
+                } else {
+                    node.parent.push(item.id);
+                    item.children.push(node);
+                }
+            } else {
+                addCommit(item.children);
+            }
+        });
+    }
+    function addParent(mergeCommand: string) {
+        const mergedBranch = getMergeName(mergeCommand);
+        // eslint-disable-next-line no-unused-vars
+        let mergedId: number | null = null;
+        searchLatestCommitOfMergedBeanch(nodes);
+        function searchLatestCommitOfMergedBeanch(array: Node[]) {
+            array.forEach((item: Node) => {
+                if (item.currentBranch === mergedBranch) {
+                    if (item.children.length === 0) {
+                        mergedId = item.id;
+                    } else {
+                        const children = item.children.find((child: Node) => child.currentBranch === mergedBranch);
+                        if (children) {
+                            searchLatestCommitOfMergedBeanch([children]);
+                        }
+                    }
+                } else if (item.children.length) {
+                    const children = item.children.find((child: Node) => child.currentBranch === mergedBranch);
+                    if (children) {
+                        searchLatestCommitOfMergedBeanch([children]);
+                    }
+                }
+            });
+        }
+        // function searchLatestCommitOfMerged(branch: string) {
+        //     (function recursiveMergedBranch(elem: Node[]) {
+        //         elem.forEach((node: Node) => {
+        //             if (node.currentBranch === branch) {
+        //                 if (node.children.length) {
+        //                     const children = node.children.find((child: Node) => child.currentBranch === branch);
+        //                     if (children) {
+        //                         recursiveMergedBranch(children);
+        //                     }
+        //                 } else {
+        //
+        //                 }
+        //             } else {
+        //
+        //             }
+        //         });
+        //     }(nodes));
+        // }
+        // recursiveMergedBranch(mergedBranch);
+        // function recursiveMergedBranch(branch: string) {
+        //     nodes.forEach((node: Node) => {
+        //         if (node.currentNode) {
+        //
+        //         } else {
+        //             recursiveMergedBranch(mergedBranch);
+        //         }
+        //     });
+        // }
+    }
     const node: Node = {
         id,
         name: `C${id}`,
@@ -91,40 +178,11 @@ export default function gitNode(command: string, nodes: Node[], id: number): Nod
             }(nodes));
         } else if (checkGitCommit(command)) {
             // eslint-disable-next-line no-inner-declarations
-            function searchDeepestChildren(child: Node) {
-                const currentChild = child.children.find((item: Node) => item.currentBranch === currBranch);
-                if (currentChild) {
-                    (function recursiveChildren(elem: Node) {
-                        if (elem.children.length) {
-                            const currentChildDeep = elem.children.find((item: Node) => item.currentBranch === currBranch);
-                            if (currentChildDeep) {
-                                recursiveChildren(currentChildDeep);
-                            }
-                        } else {
-                            node.parent.push(elem.id);
-                            elem.children.push(node);
-                        }
-                    }(currentChild));
-                } else {
-                    node.parent.push(id);
-                    child.children.push(node);
-                }
-            }
-            (function addCommit(array: Node[]) {
-                array.forEach((item: Node) => {
-                    if (item.currentNode) {
-                        item.currentNode = false;
-                        if (item.children.length) {
-                            searchDeepestChildren(item);
-                        } else {
-                            node.parent.push(item.id);
-                            item.children.push(node);
-                        }
-                    } else {
-                        addCommit(item.children);
-                    }
-                });
-            }(nodes));
+            addCommit(nodes);
+            // eslint-disable-next-line no-inner-declarations
+        } else if (checkGitMerge(command)) {
+            addCommit(nodes);
+            addParent(command);
         }
     }
     // eslint-disable-next-line no-use-before-define
