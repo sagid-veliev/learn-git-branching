@@ -82,7 +82,7 @@ export default function gitNode(command: string, nodes: Node[], id: number): Nod
     function addParent(mergeCommand: string) {
         const mergedBranch = getMergeName(mergeCommand);
         // eslint-disable-next-line no-unused-vars
-        let mergedId: number | null = null;
+        let mergedId = 0;
         searchLatestCommitOfMergedBeanch(nodes);
         function searchLatestCommitOfMergedBeanch(array: Node[]) {
             array.forEach((item: Node) => {
@@ -103,34 +103,17 @@ export default function gitNode(command: string, nodes: Node[], id: number): Nod
                 }
             });
         }
-        // function searchLatestCommitOfMerged(branch: string) {
-        //     (function recursiveMergedBranch(elem: Node[]) {
-        //         elem.forEach((node: Node) => {
-        //             if (node.currentBranch === branch) {
-        //                 if (node.children.length) {
-        //                     const children = node.children.find((child: Node) => child.currentBranch === branch);
-        //                     if (children) {
-        //                         recursiveMergedBranch(children);
-        //                     }
-        //                 } else {
-        //
-        //                 }
-        //             } else {
-        //
-        //             }
-        //         });
-        //     }(nodes));
-        // }
-        // recursiveMergedBranch(mergedBranch);
-        // function recursiveMergedBranch(branch: string) {
-        //     nodes.forEach((node: Node) => {
-        //         if (node.currentNode) {
-        //
-        //         } else {
-        //             recursiveMergedBranch(mergedBranch);
-        //         }
-        //     });
-        // }
+        recursiveMergedBranch(mergedId);
+        function recursiveMergedBranch(merged: number) {
+            debugger;
+            nodes.forEach((node: Node) => {
+                if (node.currentNode) {
+                    node.parent.push(merged);
+                } else {
+                    recursiveMergedBranch(mergedId);
+                }
+            });
+        }
     }
     const node: Node = {
         id,
