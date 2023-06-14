@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { Levels, Tasks } from '@/services/types';
+import { Node } from '@/models/types';
 
 class Api {
     private api: AxiosInstance = axios;
@@ -21,6 +22,15 @@ class Api {
 
     async getGraph(id: number): Promise<any> {
         const response: AxiosResponse = await this.api.get(`/api/v1/grapth/${id}`);
+        return response.data;
+    }
+
+    async graphWork(node: Node, command: string, taskId: number): Promise<any> {
+        const response: AxiosResponse = await this.api.post('/api/v1/graph_work', {
+            data: node,
+            command,
+            taskId,
+        });
         return response.data;
     }
 }

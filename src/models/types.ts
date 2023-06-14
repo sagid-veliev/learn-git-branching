@@ -1,9 +1,10 @@
 export interface Node {
-    id: number,
+    id?: number,
     name: string,
     parent: number[],
     children: Array<Node>,
     branch: string[],
     currentBranch: string,
-    currentNode?: boolean,
+    currentNode: boolean,
+    type: number,
 }

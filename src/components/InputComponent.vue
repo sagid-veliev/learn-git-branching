@@ -32,35 +32,31 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useRoute } from 'vue-router';
 import {
-    onBeforeMount, onMounted, Ref, ref, toRaw,
+    onBeforeMount, onMounted, Ref, ref,
 } from 'vue';
 import gitNodes from '@/utils/utils';
-import { Node } from '@/models/types';
-import checkResult from '@/utils/checkResult';
-import Api from '@/services/api';
-import { useStore } from 'vuex';
+// import { Node } from '@/models/types';
 import validate from '@/utils/validateInput';
 // eslint-disable-next-line import/extensions,import/no-unresolved
 
-const store = useStore();
 const route = useRoute();
 const title: Ref<string> = ref('');
 const command: Ref<string> = ref('');
 const commands: Ref<string[]> = ref([]);
-const nodes: Ref<Node[]> = ref([
-    {
-        id: 1,
-        name: 'C1',
-        parent: [],
-        type: 0,
-        children: [],
-        branch: ['main'],
-        currentBranch: 'main',
-        currentNode: true,
-    },
-]);
+// const nodes: Ref<Node[]> = ref([
+//     {
+//         id: 1,
+//         name: 'C1',
+//         parent: [],
+//         type: 0,
+//         children: [],
+//         branch: ['main'],
+//         currentBranch: 'main',
+//         currentNode: true,
+//     },
+// ]);
+
 const taskId: Ref<string> = ref('');
-const solveGraph: any = ref();
 const notValid: Ref<boolean> = ref(false);
 
 const checkCommands = (input: string) => {
@@ -81,16 +77,16 @@ const sendCommand = () => {
     }
     notValid.value = false;
     commands.value.push(command.value);
-    nodes.value = gitNodes(command.value, nodes.value, commands.value.filter((com) => checkCommands(com)).length + 1);
-    Api.getGraph(Number(taskId.value))
-        .then((response: any) => {
-            solveGraph.value = response.solve_graph;
-        });
-    const desicion = checkResult(toRaw(nodes.value), toRaw(solveGraph.value));
-    if (desicion) {
-        store.commit('isSolved', true);
-    }
-    command.value = '';
+    gitNodes(command.value, commands.value.filter((com) => checkCommands(com)).length + 1);
+    // Api.getGraph(Number(taskId.value))
+    //     .then((response: any) => {
+    //         solveGraph.value = response.solve_graph;
+    //     });
+    // const desicion = checkResult(toRaw(nodes.value), toRaw(solveGraph.value));
+    // if (desicion) {
+    //     store.commit('isSolved', true);
+    // }
+    // command.value = '';
 };
 
 onBeforeMount(() => {
@@ -99,7 +95,7 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-    nodes.value = gitNodes('', nodes.value, commands.value.length + 1);
+    // nodes.value = gitNodes('', nodes.value, commands.value.length + 1);
 });
 </script>
 
