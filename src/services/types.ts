@@ -1,3 +1,5 @@
+import { Node } from '@/models/types';
+
 export interface Levels {
     levels: {
         id: number;
@@ -20,4 +22,11 @@ export interface Tasks {
             }[]
         }
     }
+}
+
+export interface NodeResponse {
+    data: string,
+    command: string,
+    'remote_data': Node[] | null,
+    code: number,
 }

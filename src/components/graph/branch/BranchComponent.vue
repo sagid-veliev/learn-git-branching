@@ -1,5 +1,6 @@
 <template>
     <div
+        v-if="name.length"
         :style="{
             top: `${props.top}px`,
             left: `${props.left}%`,
@@ -10,7 +11,7 @@
             v-for="name in props.name"
             :key="name"
         >
-            {{ name }}{{ name === currentBranch ? '*' : '' }}
+            {{ name }}{{ (name === currentBranch) && currentNode ? '*' : '' }}
         </p>
     </div>
 </template>
@@ -24,6 +25,14 @@ const props = defineProps({
     currentBranch: {
         type: String,
         default: 'main',
+    },
+    currentNode: {
+        type: Boolean,
+        default: false,
+    },
+    branch: {
+        type: Array,
+        default: () => [],
     },
     top: {
         type: Number,
@@ -39,6 +48,7 @@ const props = defineProps({
 <style lang="scss" scoped>
 .branch {
     position: absolute;
+    z-index: 25;
     min-width: 75px;
     background: #a6366a;
     border: 3px solid white;

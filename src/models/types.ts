@@ -1,5 +1,5 @@
 export interface Node {
-    id?: number,
+    id: number,
     name: string,
     parent: number[],
     children: Array<Node>,

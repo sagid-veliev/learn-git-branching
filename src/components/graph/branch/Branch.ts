@@ -15,9 +15,12 @@ class GitBranch {
 
     left?: number;
 
-    constructor(name: string[], currentBranch: string, top: number, left?: number, solve?: boolean) {
+    currentNode: boolean;
+
+    constructor(name: string[], currentBranch: string, top: number, left: number, currentNode: boolean, solve?: boolean) {
         this.name = name;
         this.currentBranch = currentBranch;
+        this.currentNode = currentNode;
         this.top = top;
         this.left = left;
         this.solve = solve;
@@ -42,6 +45,7 @@ class GitBranch {
                 currentBranch: this.currentBranch,
                 top: this.top,
                 left: this.left,
+                currentNode: this.currentNode,
             });
             this.instance.mount(`.branch-${this.top}`);
         }

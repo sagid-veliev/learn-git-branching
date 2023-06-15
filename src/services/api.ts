@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { Levels, Tasks } from '@/services/types';
+import { Levels, NodeResponse, Tasks } from '@/services/types';
 import { Node } from '@/models/types';
 
 class Api {
@@ -25,11 +25,11 @@ class Api {
         return response.data;
     }
 
-    async graphWork(node: Node, command: string, taskId: number): Promise<any> {
+    async graphWork(node: Node, command: string, taskId: number): Promise<NodeResponse> {
         const response: AxiosResponse = await this.api.post('/api/v1/graph_work', {
             data: node,
             command,
-            taskId,
+            task_id: taskId,
         });
         return response.data;
     }
