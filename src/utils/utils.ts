@@ -53,11 +53,12 @@ export function createNodes(nodes: Node[]) {
                 if (children) {
                     if (children > 1) {
                         calcLeft = 90 / (children + 1);
-                        calcLeftBranch = (90 / (children + 1)) + 3;
+                        calcLeftBranch = (90 / (children + 1));
                     } else {
                         // eslint-disable-next-line no-loop-func
                         const parentNode = result.find((parent: GitNode) => parent.node.id === current?.node.children[0].parent[0]);
                         calcLeft = Number(parentNode?.positionX);
+                        calcLeftBranch = Number(parentNode?.positionXBranch);
                     }
                     calcTop += 90;
                     // eslint-disable-next-line no-loop-func
@@ -66,10 +67,11 @@ export function createNodes(nodes: Node[]) {
                             node: child,
                             positionY: calcTop,
                             positionX: calcLeft * (index + 1),
-                            positionXBranch: calcLeftBranch * (index + 1),
+                            positionXBranch: (calcLeftBranch * (index + 1)) + 3,
                         });
                     });
                     calcLeft = 45;
+                    calcLeftBranch = 48;
                 }
             }
         });
