@@ -13,7 +13,7 @@ class GitBranch {
 
     solve?: boolean;
 
-    left?: number;
+    left: number;
 
     currentNode: boolean;
 
@@ -30,7 +30,7 @@ class GitBranch {
 
     createBranch() {
         const wrapperDiv = document.createElement('div');
-        wrapperDiv.className = `branch-${this.top}-${this.left}`;
+        wrapperDiv.className = `branch-${this.top}-${Math.round(this.left)}`;
         let parentElement;
         if (!this.solve) {
             parentElement = document.querySelector('#app');
@@ -47,7 +47,7 @@ class GitBranch {
                 left: this.left,
                 currentNode: this.currentNode,
             });
-            this.instance.mount(`.branch-${this.top}-${this.left}`);
+            this.instance.mount(`.branch-${this.top}-${Math.round(this.left)}`);
         }
     }
 

@@ -41,6 +41,7 @@ class GitNode {
             });
             this.instance.mount(`.node-${this.top}-${Math.round(this.left)}`);
         }
+        console.log(this.instance);
     }
 
     destroyNode() {
