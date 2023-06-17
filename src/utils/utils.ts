@@ -4,6 +4,7 @@ import GraphBranch from '@/utils/graphBranch';
 import clear from '@/utils/clearPlayground';
 import Api from '@/services/api';
 import { NodeResponse } from '@/services/types';
+import GraphArrow from '@/utils/graphArrow';
 
 export default async function gitNodes(nodes: Node[], command = 'git commit') {
     let responseData = null;
@@ -81,10 +82,18 @@ export function createNodes(nodes: Node[]) {
 
 function createGraph(nodes: GitNode[]) {
     clear();
-    nodes.forEach((node: GitNode) => {
+    nodes.forEach((node: GitNode, index: number) => {
         const nodeInstanceChildren = new GraphNode(node.node.name, node.positionY, node.positionX);
         nodeInstanceChildren.createNode();
         const branchInstanceChildren = new GraphBranch(node.node.branch, node.node.currentBranch, node.positionY, node.positionXBranch, node.node.currentNode);
         branchInstanceChildren.createBranch();
+        if (index + 1 < nodes.length) {
+            if (node.node.parent.length > 1) {
+                console.log('FHFHFHFH');
+            } else {
+                const arrowInstanceChildren = new GraphArrow(node.positionY + 40, node.positionX, node.node.id);
+                arrowInstanceChildren.createArrow();
+            }
+        }
     });
 }

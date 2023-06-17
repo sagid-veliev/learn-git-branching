@@ -5,15 +5,18 @@ class GitArrow {
 
     top: number;
 
+    left: number;
+
     instance: Component | null;
 
     classNumber: number;
 
     solve?: boolean;
 
-    constructor(top: number, classNumber: number, solve?: boolean) {
+    constructor(top: number, left: number, classNumber: number, solve?: boolean) {
         this.componentArrow = null;
         this.top = top;
+        this.left = left;
         this.instance = null;
         this.classNumber = classNumber;
         this.solve = solve;
@@ -34,6 +37,7 @@ class GitArrow {
         if (this.componentArrow) {
             this.instance = createApp(this.componentArrow, {
                 top: this.top,
+                left: this.left,
             });
             this.instance.mount(`.arrow-${this.classNumber}`);
         }

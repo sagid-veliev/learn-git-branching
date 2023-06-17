@@ -21,7 +21,7 @@ function solveGraph(graph: Node[]) {
             nodeInstance.createNode();
             calcTop += 90;
             if (node.children.length) {
-                const arrowInstance = new GraphArrow(prevCalcTop + 40, prevCalcTop, true);
+                const arrowInstance = new GraphArrow(prevCalcTop + 40, prevCalcTop, 50);
                 arrowInstance.createArrow();
                 recursive(array[index].children);
             }

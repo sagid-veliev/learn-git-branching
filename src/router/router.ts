@@ -2,6 +2,7 @@ import ModalComponent from '@/components/ModalComponent.vue';
 import TaskListComponent from '@/components/TaskListComponent.vue';
 import TaskComponent from '@/components/TaskComponent.vue';
 import PlaygroundView from '@/components/views/PlaygroundView.vue';
+import TestPage from '@/components/views/TestPage.vue';
 import PageNotFound from '@/components/PageNotFound.vue';
 import clear from '@/utils/clearPlayground';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -29,10 +30,16 @@ const routes = [
         component: PlaygroundView,
     },
     {
+        path: '/TestPage',
+        name: 'TestPage',
+        component: TestPage,
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'NotFound',
         component: PageNotFound,
     },
+
 ];
 
 const router = createRouter({
