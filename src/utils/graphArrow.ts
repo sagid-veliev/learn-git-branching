@@ -1,5 +1,5 @@
 import GitArrow from '@/components/graph/arrow/Arrow';
-import ArrowComponent from '@/components/graph/arrow/ArrowComponentLegacy.vue';
+import ArrowComponent from '@/components/graph/arrow/ArrowComponent.vue';
 
 class GraphArrow extends GitArrow {
     componentArrow = ArrowComponent;
