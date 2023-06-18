@@ -5,6 +5,7 @@ import clear from '@/utils/clearPlayground';
 import Api from '@/services/api';
 import { NodeResponse } from '@/services/types';
 import GraphArrow from '@/utils/graphArrow';
+// import GraphArrow from '@/utils/graphArrow';
 
 export default async function gitNodes(nodes: Node[], command = 'git commit') {
     let responseData = null;
@@ -80,20 +81,39 @@ export function createNodes(nodes: Node[]) {
     }(nodes));
 }
 
+interface ArrowData {
+    dataNode: Node,
+    gitNode: HTMLElement | null,
+}
+
 function createGraph(nodes: GitNode[]) {
     clear();
-    nodes.forEach((node: GitNode, index: number) => {
+    const graphNodes: ArrowData[] = [];
+    const arrowNodes: any[] = [];
+    nodes.forEach((node: GitNode) => {
         const nodeInstanceChildren = new GraphNode(node.node.name, node.positionY, node.positionX);
         nodeInstanceChildren.createNode();
+        graphNodes.push({ dataNode: node.node, gitNode: nodeInstanceChildren.element });
         const branchInstanceChildren = new GraphBranch(node.node.branch, node.node.currentBranch, node.positionY, node.positionXBranch, node.node.currentNode);
         branchInstanceChildren.createBranch();
-        if (index + 1 < nodes.length) {
-            if (node.node.parent.length > 1) {
-                console.log('FHFHFHFH');
-            } else {
-                const arrowInstanceChildren = new GraphArrow(node.positionY + 40, node.positionX, node.node.id);
-                arrowInstanceChildren.createArrow();
+    });
+    if (graphNodes.length > 1) {
+        // eslint-disable-next-line no-plusplus
+        for (let i = 1; i < graphNodes.length; i++) {
+            if (graphNodes[i].dataNode.parent.length) {
+                graphNodes[i].dataNode.parent.forEach((parentId: number) => {
+                    const selfNode = graphNodes[i];
+                    const parentNode = graphNodes.find((elem: ArrowData) => elem.dataNode.id === parentId);
+                    arrowNodes.push({
+                        x1: Number(selfNode.gitNode?.offsetLeft) + 12,
+                        y1: Number(selfNode.gitNode?.offsetTop) + 12,
+                        x2: Number(parentNode?.gitNode?.offsetLeft) + 12,
+                        y2: Number(parentNode?.gitNode?.offsetTop) + 12,
+                    });
+                });
             }
         }
-    });
+    }
+    const arrowInstanceChildren = new GraphArrow(arrowNodes);
+    arrowInstanceChildren.createArrow();
 }

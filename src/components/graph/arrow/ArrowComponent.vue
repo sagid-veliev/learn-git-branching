@@ -1,49 +1,50 @@
 <template>
-    <div
-        :style="{
-        top: `${props.top}px`
-    }"
-        class="arrow"
-    >
-        <div
-            class="arrow-head"
-        ></div>
-        <div
-            class="arrow-foot"
-        ></div>
-    </div>
+    <canvas ref="canvasRef"></canvas>
 </template>
 
 <script lang="ts" setup>
+import { onMounted, Ref, ref } from 'vue';
+import drawArrow from '@/functions/Arrow';
+
 const props = defineProps({
-    top: {
-        type: Number,
-        default: 10,
+    // x1: Number,
+    // x2: Number,
+    // y1: Number,
+    // y2: Number,
+    arrows: {
+        type: Array,
+        default: () => [],
     },
+});
+const canvasRef: Ref<HTMLCanvasElement | null> = ref(null);
+
+onMounted(() => {
+    const canvas: HTMLCanvasElement | null = canvasRef.value;
+    if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const context = canvas.getContext('2d');
+        props.arrows.forEach((arrow: any) => {
+            drawArrow(context, arrow.x1, arrow.y1, arrow.x2, arrow.y2);
+        });
+        // drawArrow(context, Number(props.x1), Number(props.y1), Number(props.x2), Number(props.y2));
+        // window.addEventListener('resize', resizeCanvas); // Добавляем обработчик события изменения размера окна
+
+        // Функция для установки ширины канваса
+        // eslint-disable-next-line no-inner-declarations
+        // function resizeCanvas() {
+        //     if (canvas) {
+        //         canvas.width = window.innerWidth; // Ширина канваса равна ширине окна
+        //     }
+        // }
+    }
 });
 </script>
 
 <style lang="scss" scoped>
-.arrow {
-    position: absolute;
-    display: flex;
-    width: 40px;
-    flex-direction: column;
-    align-items: center;
-    top: 5%;
-    left: 50%;
-    transition: 1s;
-    &-head {
-        width: 0;
-        height: 0;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-bottom: 10px solid black;
-    }
-    &-foot {
-        width: 3px;
-        height: 50px;
-        background: #202123;
-    }
+cavnas {
+    display: block;
+    width: 100vw;
+    height: 1000px;
 }
 </style>

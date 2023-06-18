@@ -7,7 +7,6 @@ import { onMounted, Ref, ref } from 'vue';
 import drawArrow from '@/functions/Arrow';
 
 const canvasRef: Ref<HTMLCanvasElement | null> = ref(null);
-
 onMounted(() => {
     const canvas: HTMLCanvasElement | null = canvasRef.value;
     if (canvas) {
