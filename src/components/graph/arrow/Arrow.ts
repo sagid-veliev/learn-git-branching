@@ -1,41 +1,40 @@
 import { Component, createApp } from 'vue';
 
+interface Coordinates {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+}
+
 class GitArrow {
     componentArrow: Component | null;
 
-    top: number;
+    arrow: Coordinates[]
 
     instance: Component | null;
 
-    classNumber: number;
-
     solve?: boolean;
 
-    constructor(top: number, classNumber: number, solve?: boolean) {
+    constructor(arrow: Coordinates[], solve?: boolean) {
         this.componentArrow = null;
-        this.top = top;
+        this.arrow = arrow;
         this.instance = null;
-        this.classNumber = classNumber;
         this.solve = solve;
     }
 
     createArrow() {
+        debugger;
+        const parentElement = document.querySelector('#app');
         const wrapperDiv = document.createElement('div');
-        wrapperDiv.className = `arrow-${this.classNumber}`;
-        let parentElement;
-        if (!this.solve) {
-            document.body.appendChild(wrapperDiv);
-        } else {
-            parentElement = document.querySelector('#solve');
-            if (parentElement) {
-                parentElement.appendChild(wrapperDiv);
-            }
-        }
+        const id = Math.floor(Math.random() * 1000);
+        wrapperDiv.className = `arrow-${id}`;
+        parentElement?.appendChild(wrapperDiv);
         if (this.componentArrow) {
             this.instance = createApp(this.componentArrow, {
-                top: this.top,
+                arrows: this.arrow,
             });
-            this.instance.mount(`.arrow-${this.classNumber}`);
+            this.instance.mount(`.arrow-${id}`);
         }
     }
 }

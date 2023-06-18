@@ -32,17 +32,13 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useRoute } from 'vue-router';
 import {
-    onBeforeMount, onMounted, Ref, ref, toRaw,
+    onBeforeMount, onMounted, Ref, ref,
 } from 'vue';
-import gitNodes from '@/utils/utils';
+import gitNodes, { createNodes } from '@/utils/utils';
 import { Node } from '@/models/types';
-import checkResult from '@/utils/checkResult';
-import Api from '@/services/api';
-import { useStore } from 'vuex';
 import validate from '@/utils/validateInput';
 // eslint-disable-next-line import/extensions,import/no-unresolved
 
-const store = useStore();
 const route = useRoute();
 const title: Ref<string> = ref('');
 const command: Ref<string> = ref('');
@@ -52,28 +48,17 @@ const nodes: Ref<Node[]> = ref([
         id: 1,
         name: 'C1',
         parent: [],
-        type: 0,
         children: [],
-        branch: ['main'],
-        currentBranch: 'main',
+        branch: ['*master'],
+        currentBranch: 'master',
         currentNode: true,
+        type: 0,
     },
 ]);
 const taskId: Ref<string> = ref('');
-const solveGraph: any = ref();
 const notValid: Ref<boolean> = ref(false);
 
-const checkCommands = (input: string) => {
-    if (input.includes('git branch')) {
-        return false;
-    }
-    if (input.includes('git checkout')) {
-        return false;
-    }
-    return true;
-};
-
-const sendCommand = () => {
+const sendCommand = async () => {
     if (!command.value || validate(command.value)) {
         notValid.value = true;
         command.value = '';
@@ -81,16 +66,11 @@ const sendCommand = () => {
     }
     notValid.value = false;
     commands.value.push(command.value);
-    nodes.value = gitNodes(command.value, nodes.value, commands.value.filter((com) => checkCommands(com)).length + 1);
-    Api.getGraph(Number(taskId.value))
-        .then((response: any) => {
-            solveGraph.value = response.solve_graph;
-        });
-    const desicion = checkResult(toRaw(nodes.value), toRaw(solveGraph.value));
-    if (desicion) {
-        store.commit('isSolved', true);
-    }
+    const response = await gitNodes(nodes.value, command.value);
     command.value = '';
+    if (response) {
+        nodes.value = response;
+    }
 };
 
 onBeforeMount(() => {
@@ -99,7 +79,7 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-    nodes.value = gitNodes('', nodes.value, commands.value.length + 1);
+    createNodes(nodes.value);
 });
 </script>
 

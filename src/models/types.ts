@@ -5,5 +5,6 @@ export interface Node {
     children: Array<Node>,
     branch: string[],
     currentBranch: string,
-    currentNode?: boolean,
+    currentNode: boolean,
+    type: number,
 }

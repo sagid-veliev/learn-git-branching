@@ -6,7 +6,7 @@ function validateGitBranchOrCheckout(input: string) {
 }
 
 function validate(input: string) {
-    if (input.includes('git branch') || input.includes('git checkout')) {
+    if (input.includes('git branch') || input.includes('git checkout') || input.includes('git merge')) {
         const branchCommand = `${input.split(' ')[0]} ${input.split(' ')[1]}`;
         return !commands.includes(branchCommand) || !validateGitBranchOrCheckout(input);
     }

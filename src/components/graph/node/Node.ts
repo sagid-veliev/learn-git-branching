@@ -13,9 +13,12 @@ class GitNode {
 
     solve?: boolean;
 
+    element: HTMLElement | null;
+
     constructor(name: string, top: number, left: number, solve?: boolean) {
         this.componentNode = null;
         this.instance = null;
+        this.element = null;
         this.name = name;
         this.top = top;
         this.left = left;
@@ -24,7 +27,8 @@ class GitNode {
 
     createNode() {
         const wrapperDiv = document.createElement('div');
-        wrapperDiv.className = `node-${this.top}-${Math.round(this.left)}`;
+        const className = `node-${this.top}-${Math.round(this.left)}`;
+        wrapperDiv.className = className;
         let parentElement;
         if (!this.solve) {
             parentElement = document.querySelector('#app');
@@ -39,7 +43,11 @@ class GitNode {
                 top: this.top,
                 left: this.left,
             });
-            this.instance.mount(`.node-${this.top}-${Math.round(this.left)}`);
+            this.instance.mount(`.${className}`);
+        }
+        const container = document.querySelector(`.${className}`);
+        if (container) {
+            this.element = container.querySelector('.collapse');
         }
     }
 
