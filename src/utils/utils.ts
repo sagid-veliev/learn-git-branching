@@ -58,7 +58,9 @@ export function createNodes(nodes: Node[]) {
                         calcLeftBranch = (90 / (children + 1)) + 3;
                     } else {
                         // eslint-disable-next-line no-loop-func
-                        const parentNode = result.find((parent: GitNode) => parent.node.id === current?.node.children[0].parent[0]);
+                        const parentNode = result.find((parent: GitNode) => {
+                            return parent.node.id === current?.node.children[0].parent[0];
+                        });
                         calcLeft = Number(parentNode?.positionX);
                         calcLeftBranch = Number(parentNode?.positionXBranch);
                     }
@@ -91,6 +93,7 @@ function createGraph(nodes: GitNode[]) {
     const graphNodes: ArrowData[] = [];
     const arrowNodes: any[] = [];
     nodes.forEach((node: GitNode) => {
+        debugger;
         const nodeInstanceChildren = new GraphNode(node.node.name, node.positionY, node.positionX);
         nodeInstanceChildren.createNode();
         graphNodes.push({ dataNode: node.node, gitNode: nodeInstanceChildren.element });
