@@ -7,4 +7,5 @@ export interface Node {
     currentBranch: string,
     currentNode: boolean,
     type: number,
+    copy: boolean,
 }

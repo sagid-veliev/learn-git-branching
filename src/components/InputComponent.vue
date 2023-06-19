@@ -53,6 +53,7 @@ const nodes: Ref<Node[]> = ref([
         currentBranch: 'master',
         currentNode: true,
         type: 0,
+        copy: false,
     },
 ]);
 const taskId: Ref<string> = ref('');

@@ -5,7 +5,6 @@ import clear from '@/utils/clearPlayground';
 import Api from '@/services/api';
 import { NodeResponse } from '@/services/types';
 import GraphArrow from '@/utils/graphArrow';
-// import GraphArrow from '@/utils/graphArrow';
 
 export default async function gitNodes(nodes: Node[], command = 'git commit') {
     let responseData = null;

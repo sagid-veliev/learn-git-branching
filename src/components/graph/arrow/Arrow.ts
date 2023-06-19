@@ -24,7 +24,6 @@ class GitArrow {
     }
 
     createArrow() {
-        debugger;
         const parentElement = document.querySelector('#app');
         const wrapperDiv = document.createElement('div');
         const id = Math.floor(Math.random() * 1000);

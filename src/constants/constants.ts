@@ -8,6 +8,8 @@ const COMMANDS: string[] = [
     'git fetch',
     'git clone',
     'git push',
+    'git cherry-pick',
+    'git revert',
 ];
 
 export default COMMANDS;
