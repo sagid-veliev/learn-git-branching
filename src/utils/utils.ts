@@ -8,12 +8,18 @@ import GraphArrow from '@/utils/graphArrow';
 
 export default async function gitNodes(nodes: Node[], command = 'git commit') {
     let responseData = null;
+    let responseRemoteData = null;
     await Api.graphWork(nodes[0], command, 1)
         .then((response: NodeResponse) => {
             responseData = JSON.parse(response.data);
+            responseRemoteData = JSON.parse(response.remote_data);
         });
     if (responseData) {
         createNodes(responseData);
+    }
+    if (responseData && responseRemoteData) {
+        createNodes(responseData, 30, 33);
+        createNodes(responseRemoteData, 60, 63);
     }
     return Promise.resolve(responseData);
 }
@@ -25,10 +31,10 @@ interface GitNode {
     positionXBranch: number;
 }
 
-export function createNodes(nodes: Node[]) {
+export function createNodes(nodes: Node[], calcLeftParam?: number, calcLeftBranchParam?: number) {
     let calcTop = 10;
-    let calcLeft = 45;
-    let calcLeftBranch = 48;
+    let calcLeft = calcLeftParam ?? 45;
+    let calcLeftBranch = calcLeftBranchParam ?? 48;
     (function recursive(array: Node[]) {
         const queue: GitNode[] = [];
         const result: GitNode[] = [];
