@@ -1,4 +1,4 @@
-import { Component, createApp } from 'vue';
+import { Component, ComponentOptions, createApp } from 'vue';
 
 interface Coordinates {
     x1: number;
@@ -12,7 +12,7 @@ class GitArrow {
 
     arrow: Coordinates[]
 
-    instance: Component | null;
+    instance: ComponentOptions | null;
 
     solve?: boolean;
 
@@ -34,6 +34,13 @@ class GitArrow {
                 arrows: this.arrow,
             });
             this.instance.mount(`.arrow-${id}`);
+        }
+    }
+
+    updateArrow(newArrow: Coordinates[]) {
+        this.arrow = newArrow;
+        if (this.instance) {
+            this.instance.props.arrows = this.arrow;
         }
     }
 }

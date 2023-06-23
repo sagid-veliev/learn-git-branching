@@ -6,20 +6,25 @@ import Api from '@/services/api';
 import { NodeResponse } from '@/services/types';
 import GraphArrow from '@/utils/graphArrow';
 
+let responseData: any = null;
+let responseRemoteData: any = null;
+const arrowNodes: any[] = [];
+let origin = false;
+
 export default async function gitNodes(nodes: Node[], command = 'git commit') {
-    let responseData = null;
-    let responseRemoteData = null;
     await Api.graphWork(nodes[0], command, 1)
         .then((response: NodeResponse) => {
             responseData = JSON.parse(response.data);
             responseRemoteData = JSON.parse(response.remote_data);
         });
-    if (responseData) {
+    if (responseData && !responseRemoteData) {
         createNodes(responseData);
     }
     if (responseData && responseRemoteData) {
-        createNodes(responseData, 30, 33);
-        createNodes(responseRemoteData, 60, 63);
+        clear();
+        createNodes(responseData, 40, 43);
+        origin = true;
+        createNodes(responseRemoteData, 70, 73);
     }
     return Promise.resolve(responseData);
 }
@@ -38,6 +43,7 @@ export function createNodes(nodes: Node[], calcLeftParam?: number, calcLeftBranc
     (function recursive(array: Node[]) {
         const queue: GitNode[] = [];
         const result: GitNode[] = [];
+        let children: number | undefined = 0;
         array.forEach((commit: Node) => {
             let current: GitNode | undefined = {
                 node: commit,
@@ -56,7 +62,8 @@ export function createNodes(nodes: Node[], calcLeftParam?: number, calcLeftBranc
                 if (current) {
                     result.push(current);
                 }
-                const children: number | undefined = current?.node.children.length;
+                children = current?.node.children.length;
+                console.log(current?.node.name, current?.node.children.length);
                 if (children) {
                     if (children > 1) {
                         calcLeft = 90 / (children + 1);
@@ -77,8 +84,8 @@ export function createNodes(nodes: Node[], calcLeftParam?: number, calcLeftBranc
                             positionXBranch: calcLeftBranch * (index + 1) - (3 * index),
                         });
                     });
-                    calcLeft = 45;
-                    calcLeftBranch = 48;
+                    calcLeft = calcLeftParam ?? 45;
+                    calcLeftBranch = calcLeftBranchParam ?? 48;
                 }
             }
         });
@@ -92,9 +99,10 @@ interface ArrowData {
 }
 
 function createGraph(nodes: GitNode[]) {
-    clear();
+    if (responseData && !responseRemoteData) {
+        clear();
+    }
     const graphNodes: ArrowData[] = [];
-    const arrowNodes: any[] = [];
     nodes.forEach((node: GitNode) => {
         const nodeInstanceChildren = new GraphNode(node.node.name, node.positionY, node.positionX);
         nodeInstanceChildren.createNode();
@@ -119,6 +127,8 @@ function createGraph(nodes: GitNode[]) {
             }
         }
     }
-    const arrowInstanceChildren = new GraphArrow(arrowNodes);
-    arrowInstanceChildren.createArrow();
+    if (origin) {
+        const arrowInstanceChildren = new GraphArrow(arrowNodes);
+        arrowInstanceChildren.createArrow();
+    }
 }

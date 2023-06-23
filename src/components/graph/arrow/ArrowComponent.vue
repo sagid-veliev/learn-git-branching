@@ -28,15 +28,6 @@ onMounted(() => {
             drawArrow(context, arrow.x1, arrow.y1, arrow.x2, arrow.y2);
         });
         // drawArrow(context, Number(props.x1), Number(props.y1), Number(props.x2), Number(props.y2));
-        // window.addEventListener('resize', resizeCanvas); // Добавляем обработчик события изменения размера окна
-
-        // Функция для установки ширины канваса
-        // eslint-disable-next-line no-inner-declarations
-        // function resizeCanvas() {
-        //     if (canvas) {
-        //         canvas.width = window.innerWidth; // Ширина канваса равна ширине окна
-        //     }
-        // }
     }
 });
 </script>

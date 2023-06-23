@@ -32,18 +32,18 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useRoute } from 'vue-router';
 import {
-    onBeforeMount, onMounted, Ref, ref,
+    onBeforeMount, onMounted, ref, Ref,
 } from 'vue';
 import gitNodes, { createNodes } from '@/utils/utils';
-import { Node } from '@/models/types';
+// import { Node } from '@/models/types';
 import validate from '@/utils/validateInput';
 // eslint-disable-next-line import/extensions,import/no-unresolved
 
 const route = useRoute();
-const title: Ref<string> = ref('');
+const title = ref('');
 const command: Ref<string> = ref('');
 const commands: Ref<string[]> = ref([]);
-const nodes: Ref<Node[]> = ref([
+const nodes = ref([
     {
         id: 1,
         name: 'C1',
@@ -56,8 +56,8 @@ const nodes: Ref<Node[]> = ref([
         copy: false,
     },
 ]);
-const taskId: Ref<string> = ref('');
-const notValid: Ref<boolean> = ref(false);
+const taskId = ref('');
+const notValid = ref(false);
 
 const sendCommand = async () => {
     if (!command.value || validate(command.value)) {
@@ -75,8 +75,8 @@ const sendCommand = async () => {
 };
 
 onBeforeMount(() => {
-    taskId.value = String(route.params.id);
-    title.value = String(route.params.title);
+    taskId.value = String(route?.params.id);
+    title.value = String(route?.params.title);
 });
 
 onMounted(() => {
